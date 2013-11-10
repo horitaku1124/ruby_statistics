@@ -46,8 +46,8 @@ class Array
     Math.sqrt(self.devsq / self.length)
   end
 
-  # 共分散(偏差積和)
-  def covarOf array2
+  # 偏差積和
+  def devmulOf array2
     if self.length != array2.length then raise "Different array size." end
 
     mean1 = self.mean
@@ -57,13 +57,16 @@ class Array
     self.length.times do |i|
       mul += (self[i] - mean1) * (array2[i] - mean2)
     end
-    mul / self.length
+    mul
+  end
+
+  # 共分散
+  def covarOf array2
+    self.devmulOf(array2) / self.length
   end
 
   # 相関係数
   def correlOf array2
-    if self.length != array2.length then raise "Different array size." end
-
     self.covarOf(array2) / self.stdevp / array2.stdevp
   end
 end
