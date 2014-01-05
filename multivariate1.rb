@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 
+require "Matrix"
 require './MyArray'
+require './MultivariateUtil'
 
 y = [45,38,41,34,59,47,35,43,54,52] # 配向度
 x1 = [17.5,17.0,18.5,16.0,19.0,19.5,16.0,18.0,19.0,19.5] # 温度
@@ -48,3 +50,24 @@ b0 = y.mean - x1.mean * b1 - x2.mean * b2
 print "b0:",b0,"\n"
 print "b1:",b1,"\n"
 print "b2:",b2,"\n"
+
+puts
+puts "行列を使った方法"
+left = Matrix[
+  [devsq_x1, c_x1_x2],
+  [c_x1_x2, devsq_x2]
+]
+right = Matrix[
+  [c_y_x1],
+  [c_y_x2]
+]
+
+bm = left.inverse * right
+ym = y.mean - bm[0, 0] * x1.mean - bm[1, 0] * x2.mean
+p bm
+p ym
+
+puts
+puts "クラス化した方法"
+multi = MultivariateUtil.new(y, [x1, x2])
+p multi.modulus
